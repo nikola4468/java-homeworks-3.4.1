@@ -13,3 +13,5 @@ public class Movie {
     private String title; // название фильма
     private String genres; // жанр фильма
 }
+
+
