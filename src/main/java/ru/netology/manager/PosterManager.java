@@ -3,40 +3,33 @@ package ru.netology.manager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.netology.domain.Movie;
+import ru.netology.domain.PosterRepository;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 
 public class PosterManager {
-    private Movie[] movies = new Movie[0];
-    private int amount = 10;
 
-    public PosterManager(int amount) {
-        this.amount = amount;
-    }
+    private PosterRepository repository = new PosterRepository();
+//    private PosterRepository repository;
 
     public void add(Movie movie) {
-        int length = movies.length + 1;
-        Movie[] tmp = new Movie[length];
-        System.arraycopy(movies, 0, tmp, 0, movies.length);
-        int lastIndex = tmp.length - 1;
-        tmp[lastIndex] = movie;
-        movies = tmp;
+        repository.save(movie);
     }
 
-    public Movie[] recent() {
-        int resultLength;
-        if (movies.length <= amount) {
-            resultLength = movies.length;
-        } else {
-            resultLength = amount;
+    public Movie[] getAll() {
+        Movie[] items = repository.findAll();
+        Movie[] result = new Movie[items.length];
+        for (int i = 0; i < result.length; i++) {
+            int index = items.length - i - 1;
+            result[i] = items[index];
         }
-        Movie[] recent = new Movie[resultLength];
-        for (int i = 0; i < recent.length; i++) {
-            int index = movies.length - i - 1;
-            recent[i] = movies[index];
-        }
-        return recent;
+        return result;
+    }
+
+    public void removeById(int id) {
+        repository.removeById(id);
     }
 }
